@@ -10,6 +10,11 @@ namespace ATM_Console_App1.App
 {
     public class ATMApp : IUserLogin, IUserAccountActions, ITransaction
     {
+        private event Action<string> LoginSuccesfulEvent;
+        public static event Action<string> WelcomeUser;
+
+
+
         private List<UserAccount>? userAccountList;
         private UserAccount selectedAccount;
         private List<Transaction> _ListOfTransactions;
@@ -20,10 +25,12 @@ namespace ATM_Console_App1.App
         {
             display = new AppDisplay();
         }
+       
         public void Run()
         {
             AppDisplay.Welcome();
             CheckUserCardNumAndPassword();
+            AddLoginSuccessful(HandleLoginSuccesful);
             AppDisplay.WelcomeUser(selectedAccount.FullName);
             while(true) { 
             AppDisplay.DisplayAppMenu();
@@ -121,6 +128,11 @@ namespace ATM_Console_App1.App
                     Utility.Displaymsg("Invalid Option", false);
                     break;
             }
+        }
+
+        public static void HandleLoginSuccesful(string message)
+        {
+            Console.WriteLine("=> {0}", message);
         }
 
         public void CheckBalance()
@@ -304,6 +316,7 @@ namespace ATM_Console_App1.App
             {
                 Utility.Displaymsg("Transfer failed. Reciever bank account is invalid.", false);
             }
+            
 
             //check recievers name
             if (selectedBankAccountReciever.FullName != internalTransfer.RecipientBankAccountName)
@@ -321,7 +334,37 @@ namespace ATM_Console_App1.App
             //display success
             Utility.Displaymsg($"You have successfully Transfered {Utility.FormatAmount(internalTransfer.TransferAmount)} to {internalTransfer.RecipientBankAccountName}", true);
         }
+        
+        public void AddLoginSuccessful (Action<string> method)
+        {
+            LoginSuccesfulEvent += method;
+        }
 
+        public virtual void OnLoginSuccessful(string message)
+        {
+            LoginSuccesfulEvent?.Invoke(message);
+        }
+        
 
+    }
+
+    public class Bank
+    {
+        //private readonly List<String> _visitors = new List<string>();
+
+        public static event Action<string> NewUserAdded;
+
+        public void AddAtmUser(string userName)
+        {
+
+            NewUserAdded?.Invoke(userName);
+        }
+    }
+    public class UserWelcomer
+    {
+        public void WelcomeUser(string userName)
+        {
+            Console.WriteLine($"Welcome {userName}");
+        }
     }
 }

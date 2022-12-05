@@ -9,11 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleTables" Version="2.4.2" />
+    <Compile Remove="Igala Selection\**" />
+    <EmbeddedResource Remove="Igala Selection\**" />
+    <None Remove="Igala Selection\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Igala Selection\" />
+    <PackageReference Include="ConsoleTables" Version="2.4.2" />
   </ItemGroup>
 
 </Project>

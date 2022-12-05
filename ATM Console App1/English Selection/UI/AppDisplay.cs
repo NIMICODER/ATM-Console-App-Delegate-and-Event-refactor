@@ -53,6 +53,7 @@ namespace ATM_Console_App.UI
 
         internal static void WelcomeUser(string fullName)
         {
+            
             Console.WriteLine($"Welcome back, {fullName}");
             Utility.PressEnterToContinue();
         }
