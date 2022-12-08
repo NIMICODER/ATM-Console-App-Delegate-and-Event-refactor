@@ -15,15 +15,15 @@ namespace ATM_Console_App1.App
         {
            
             ATMApp atmApp = new ATMApp();
-            var userwelcomer = new UserWelcomer();
+           // var userwelcomer = new UserWelcomer();
 
-            Bank bank = new Bank();
+           // Bank bank = new Bank();
            
-            bank.AddAtmUser("David");
+           // bank.AddAtmUser("David");
 
             atmApp.InitializeData();
             atmApp.Run();
-            Bank.NewUserAdded += userwelcomer.WelcomeUser;
+            //Bank.NewUserAdded += userwelcomer.WelcomeUser;
 
             //long cardNumber = Validate.Convert<long>("your card number");
             //Console.WriteLine($"Your card number is {cardNumber}");

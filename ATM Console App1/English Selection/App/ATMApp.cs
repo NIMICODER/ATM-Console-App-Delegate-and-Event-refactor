@@ -12,6 +12,7 @@ namespace ATM_Console_App1.App
     {
         private event Action<string> LoginSuccesfulEvent;
         public static event Action<string> WelcomeUser;
+        event Action<string> AccountLocked;
 
 
 
@@ -19,18 +20,24 @@ namespace ATM_Console_App1.App
         private UserAccount selectedAccount;
         private List<Transaction> _ListOfTransactions;
         private const decimal minimumBalance = 1000;
-        private readonly AppDisplay display;
-
+        public static AppDisplay display = new AppDisplay();
+        
+        
         public ATMApp()
         {
-            display = new AppDisplay();
+            display.AddLoginSuccessful(Welcome);
+            
         }
+
+        
        
         public void Run()
         {
             AppDisplay.Welcome();
             CheckUserCardNumAndPassword();
+            
             AddLoginSuccessful(HandleLoginSuccesful);
+
             AppDisplay.WelcomeUser(selectedAccount.FullName);
             while(true) { 
             AppDisplay.DisplayAppMenu();
@@ -38,6 +45,14 @@ namespace ATM_Console_App1.App
             }
             //AppDisplay.DisplayAppMenu();
             //ProcessMenuOption();
+        }
+        public static void Welcome(string message)
+        {
+            Console.WriteLine(message);
+        }
+        public static void HandleAccountLocked(string message)
+        {
+            Console.WriteLine("=> {0}", message);
         }
 
         public void InitializeData()
@@ -340,11 +355,16 @@ namespace ATM_Console_App1.App
             LoginSuccesfulEvent += method;
         }
 
-        public virtual void OnLoginSuccessful(string message)
+        public virtual void OnLoginSuccesful(string message)
         {
             LoginSuccesfulEvent?.Invoke(message);
         }
-        
+
+        public void AddAccountLocked(Action<string> method)
+        {
+            AccountLocked += method;
+        }
+
 
     }
 
@@ -359,6 +379,12 @@ namespace ATM_Console_App1.App
 
             NewUserAdded?.Invoke(userName);
         }
+
+        /*
+        public void OnAccountLocked(string message)
+        {
+            AccountLocked?.Invoke(message);
+        }*/
     }
     public class UserWelcomer
     {

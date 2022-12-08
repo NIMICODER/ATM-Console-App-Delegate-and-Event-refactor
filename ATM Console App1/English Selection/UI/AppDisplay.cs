@@ -11,8 +11,12 @@ namespace ATM_Console_App.UI
     public  class AppDisplay
     {
         internal const string cur = "N ";
-       // public static int cur;
-
+        private static event Action<string> LoginSuccesfulEvent;
+        // public static int cur;
+        public void AddLoginSuccesfulMethod(Action<string> method)
+        {
+            LoginSuccesfulEvent += method;
+        }
         internal static void Welcome()
         {
             // Console.WriteLine("Hello, World!"); 
@@ -53,10 +57,26 @@ namespace ATM_Console_App.UI
 
         internal static void WelcomeUser(string fullName)
         {
-            
+            OnLoginSuccesful("Login Succesful....");
             Console.WriteLine($"Welcome back, {fullName}");
             Utility.PressEnterToContinue();
         }
+
+        public static   void OnLoginSuccesful(string message)
+        {
+            LoginSuccesfulEvent?.Invoke(message);
+        }
+        public void AddLoginSuccessful(Action<string> method)
+        {
+            LoginSuccesfulEvent += method;
+        }
+
+        /*
+        private static void OnLoginSuccesful(string v)
+        {
+            throw new NotImplementedException();
+        }
+        */
 
         internal static void DisplayAppMenu()
         {
